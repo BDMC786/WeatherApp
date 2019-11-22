@@ -24,6 +24,7 @@ def function():
     # print(data[1])
     # print("__________________________")
     # print(data[2])
+    print(data[2])
     return render_template('results.html')
 
 
