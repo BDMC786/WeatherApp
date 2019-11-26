@@ -14,10 +14,10 @@
     <body style="background-color:lightblue;">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <form method="POST">
                         <div class="form-group">
-                            <h2>Weather Forecast</h2>
+                            <h1>Weather Forecast</h1>
                             <div class="row">
                                 <input class="form-control" id="input" name="text" placeholder="Enter City and State">
                             </div>
@@ -28,8 +28,46 @@
                 </div>
             </div>
         </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div><h2>For {{ data[0] }}:
+                </div>
+            </div>
+        </div>
 
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div><h3>Current Weather ({{ data[1]['time'] }}):</h3></div>
+                        <div><h3>   Conditions: {{ data[1]['summary'] }}</h3></div>
+                        <div><h3>   { data[1]['temperature'] }}</h3></div>
+                        <div><h3>   Feels Like {{ data[1]['apparentTemperature'] }}</h3></div>
+                        <div><h3>   Cloud Coverage: {{ data[1]['cloudCover'] }}</h3></div>
+                </div>
+            </div>
+        </div> 
 
     </body>
 
 </html>
+
+        <!-- This is how to display the snow accumulation, if present (replace key etc.):
+            {% if "apparentTemperature" in data[1]:  %}
+            <div><h2>{{ data[1]["apparentTemperature"] }}</h2></div>
+
+        {% endif %} --> 
+
+
+        <!-- Below is the template for adding elements -->
+
+    <!-- 
+        <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div><h2>Weather for {{ data[0] }}:
+            </div>
+        </div>
+    </div> 
+-->
+
