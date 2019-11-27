@@ -79,7 +79,7 @@ def getWeather(city):
                 hour_dict[element] = hours[element]
                 if element not in hourly_elements:
                     hourly_elements.append(element)
-        hour_dict["time"] = dt.utcfromtimestamp(int(hours["time"]) + int(time_adjust)).strftime('%r')
+        hour_dict["time"] = dt.utcfromtimestamp(int(hours["time"]) + int(time_adjust)).strftime('%A %r')
         hour_dict["apparentTemperature"] = f'{round(hour_dict["apparentTemperature"])} °F' #Round 
         hour_dict["cloudCover"] = f'{round(hour_dict["cloudCover"] * 100)}%' #Percentage
         hour_dict["humidity"] = f'{round(hour_dict["humidity"] * 100)}%'
@@ -155,6 +155,7 @@ def getWeather(city):
     #Add all data sets to a list to pass to app
     data = [place, current_dict, hourly_list, daily_list]
 
+    print(url)
     print("DATA")
     print(data[0])
     print(data[1])
