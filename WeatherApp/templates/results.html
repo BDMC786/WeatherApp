@@ -29,7 +29,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="citation"><h1><strong>Powered by DarkSky API</strong></h1></div>
+                    <div class="citation"><a href="https://darksky.net/poweredby/" target="_blank"><h1><strong>Powered by DarkSky API</strong></h1></a></div>
                 </div>
             </div>
         </div>
@@ -183,6 +183,16 @@
                     {% endfor %}
                 </div>
             </div> 
+
+        <hr class="endSection">
+
+        {% if "alert" in data %}
+        {% for days in data[5] %}
+        <div class="container">
+
+        </div>
+        {% endfor %}
+        {% endif %}
             <h3><a class="scroll" id="scroll" href="#Top">Jump to Top</a>
                 <br><a class="scroll" id="scroll" href="#HourlyTop">Jump to Hourly</a>
                 <br><a class="scroll" id="scroll" href="#DailyTop">Jump to Daily</a></h3>

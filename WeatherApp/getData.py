@@ -5,6 +5,7 @@ def getWeather(city):
     # import pytz
     import datetime, pytz
     key = "5fc1f583fa2e15d8a27208e502ba5fb0"
+    print(key)
     #Get user input from App as variable selection
 
     #Convert selection to coordinates 
@@ -15,23 +16,35 @@ def getWeather(city):
     location = geolocator.geocode(city)
     latitude = location.latitude
     longitude = location.longitude
+    print("STEP 1")
 
     #Get location name from geopy
     city_mod = f"{location}".split(", ") #Need to use the f method here?
     place = f'{city_mod[0]}, {city_mod[2]}'
     
     #Get utc offset in seconds
-    zone_url = "http://api.geonames.org/timezoneJSON?formatted=true&lat={}&lng={}&username=WeatherApp".format(latitude,longitude)
-    r = requests.get(zone_url) ## Make a request
+    # zone_url = "http://api.geonames.org/timezoneJSON?formatted=true&lat={}&lng={}&username=WeatherApp".format(latitude,longitude)
+    # r = requests.get(zone_url) ## Make a request
 
-    x = datetime.datetime.now(pytz.timezone(r.json()['timezoneId'])).strftime('%z')
-    time_adjust = (int(x)/100) * 3600
+
+
+    # x = datetime.datetime.now(pytz.timezone(r.json()['timezoneId'])).strftime('%z')
+    # time_adjust = (int(x)/100) * 3600
+    # print("time adjust:")
+    # print(time_adjust)
 
     #Get URL for API call to DarkSky
     url = f'https://api.darksky.net/forecast/{key}/{latitude},{longitude}'
+    print(url)
     #Make API Call
     response = requests.get(url)
     response_json = response.json()
+
+    #Get timezone offset
+    x = response_json["offset"]
+    time_adjust = (int(x)) * 3600
+    print("time adjust:")
+    print(time_adjust)
 
     #Get Current Conditions from API data
     current_weather = response_json["currently"]
@@ -79,15 +92,39 @@ def getWeather(city):
                 hour_dict[element] = hours[element]
                 if element not in hourly_elements:
                     hourly_elements.append(element)
-        hour_dict["time"] = dt.utcfromtimestamp(int(hours["time"]) + int(time_adjust)).strftime('%A %r')
-        hour_dict["apparentTemperature"] = f'{round(hour_dict["apparentTemperature"])} °F' #Round 
-        hour_dict["cloudCover"] = f'{round(hour_dict["cloudCover"] * 100)}%' #Percentage
-        hour_dict["humidity"] = f'{round(hour_dict["humidity"] * 100)}%'
-        # Not sure how to format precipIntensity
-        hour_dict["precipProbability"] = f'{round(hour_dict["precipProbability"] * 100)}%'
-        hour_dict["temperature"] = f'{round(hour_dict["temperature"])} °F'
-        hour_dict["windSpeed"] = round(hour_dict["windSpeed"])
+        try:
+            hour_dict["time"] = dt.utcfromtimestamp(int(hours["time"]) + int(time_adjust)).strftime('%A %r')
+        except:
+            print('hour_dict["time"] failed')
+        try:
+            hour_dict["apparentTemperature"] = f'{round(hour_dict["apparentTemperature"])} °F' #Round 
+        except:
+            print('hour_dict["apparentTemperature"] failed')
+        try:
+            hour_dict["cloudCover"] = f'{round(hour_dict["cloudCover"] * 100)}%' #Percentage
+        except:
+            print('hour_dict["cloudCover"] failed')
+        try:
+            hour_dict["humidity"] = f'{round(hour_dict["humidity"] * 100)}%'
+        except:
+            print('hour_dict["humidity"] failed')
+        try:
+            hour_dict["precipProbability"] = f'{round(hour_dict["precipProbability"] * 100)}%'
+        except:
+            print('hour_dict["precipProbability"] failed')
+        try:
+            hour_dict["temperature"] = f'{round(hour_dict["temperature"])} °F'
+        except:
+            print('hour_dict["temperature"] failed')
+        try:
+            hour_dict["windSpeed"] = round(hour_dict["windSpeed"])
+        except:
+            print('hour_dict["windSpeed"]')
+        
         hourly_list.append(hour_dict)
+
+    
+    # print("hours done")
     
     # #Correct Format
     # for hours in hourly_list:
@@ -114,6 +151,7 @@ def getWeather(city):
     
     #Daily
     daily_weather = response_json["daily"]["data"]
+    # print(daily_weather)
 
     #Pull data from Daily Conditions
     daily_elements_try = ["cloudCover", "humidity", "icon", "precipIntensity", "precipIntensityMax", 
@@ -122,40 +160,102 @@ def getWeather(city):
     daily_elements = []
     daily_list = []
 
+    # print("enter daily loop")
+
     for days in daily_weather:
     #     print(days)
     #     print("_____________")
         daily_dict = {}
         for elements in daily_elements_try:
-    #         print(elements)
+            # print("elements")
             if elements in days:
-    #             print(elements)
+                # print(elements)
                 daily_dict[elements] = days[elements]
+                # print(daily_dict[elements])
                 if elements not in daily_elements:
                     daily_elements.append(elements)
-        daily_dict["cloudCover"] = f'{round(daily_dict["cloudCover"] * 100)}%'
-        daily_dict["humidity"] = f'{round(daily_dict["humidity"] * 100)}%'
-        daily_dict["precipProbability"] = f'{round(daily_dict["precipProbability"] * 100)}%'
-        daily_dict["temperatureHigh"] = f'{round(daily_dict["temperatureHigh"])} °F'
-        daily_dict["temperatureLow"] = f'{round(daily_dict["temperatureLow"])} °F'
-        daily_dict["windSpeed"] = round(daily_dict["windSpeed"])
-        #TIMES
-        # daily_dict["precipIntensityMaxTime"] = daily_dict["precipIntensityMaxTime"] + time_adjust
-        daily_dict["precipIntensityMaxTime"] = f"{dt.utcfromtimestamp(daily_dict['precipIntensityMaxTime'] + time_adjust).strftime('%r')}"
-        daily_dict["sunriseTime"] = f"{dt.utcfromtimestamp(daily_dict['sunriseTime'] + time_adjust).strftime('%r')}"
-        daily_dict["sunsetTime"] = f"{dt.utcfromtimestamp(daily_dict['sunsetTime'] + time_adjust).strftime('%r')}"
-        daily_dict["temperatureHighTime"] = f"{dt.utcfromtimestamp(daily_dict['temperatureHighTime'] + time_adjust).strftime('%r')}"
-        daily_dict["temperatureLowTime"] = f"{dt.utcfromtimestamp(daily_dict['temperatureLowTime'] + time_adjust).strftime('%r')}"
-        daily_dict["time"] = f"{dt.utcfromtimestamp(daily_dict['time'] + time_adjust).strftime('%A %B %d')}"
-        daily_dict["uvIndexTime"] = f"{dt.utcfromtimestamp(daily_dict['uvIndexTime'] + time_adjust).strftime('%r')}"
+                    # print(daily_elements)
+        try:
+            daily_dict["cloudCover"] = f'{round(daily_dict["cloudCover"] * 100)}%'
+        except:
+            print('daily_dict["cloudCover"] failed')
+        try:
+            daily_dict["humidity"] = f'{round(daily_dict["humidity"] * 100)}%'
+        except:
+            print('daily_dict["humidity"] failed')
+        try:
+            daily_dict["precipProbability"] = f'{round(daily_dict["precipProbability"] * 100)}%'
+        except:
+            print('daily_dict["precipProbability"] failed')
+        try:
+            daily_dict["temperatureHigh"] = f'{round(daily_dict["temperatureHigh"])} °F'
+        except:
+            print('daily_dict["temperatureHigh"] failed')
+        try:
+            daily_dict["temperatureLow"] = f'{round(daily_dict["temperatureLow"])} °F'
+        except:
+            print('daily_dict["temperatureLow"] failed')
+        try:
+            daily_dict["windSpeed"] = round(daily_dict["windSpeed"])
+        except:
+            print('daily_dict["windSpeed"] failed')
+
+            #TIMES
+        try:
+            daily_dict["precipIntensityMaxTime"] = f"{dt.utcfromtimestamp(daily_dict['precipIntensityMaxTime'] + time_adjust).strftime('%r')}"
+        except:
+            print('daily_dict["precipIntensityMaxTime"] failed')
+        try:
+            daily_dict["sunriseTime"] = f"{dt.utcfromtimestamp(daily_dict['sunriseTime'] + time_adjust).strftime('%r')}"
+        except:
+            print('daily_dict["sunriseTime"] failed')
+        try:
+            daily_dict["sunsetTime"] = f"{dt.utcfromtimestamp(daily_dict['sunsetTime'] + time_adjust).strftime('%r')}"
+        except:
+            print('daily_dict["sunsetTime"] failed')
+        try:
+            daily_dict["temperatureHighTime"] = f"{dt.utcfromtimestamp(daily_dict['temperatureHighTime'] + time_adjust).strftime('%r')}"
+        except:
+            print('daily_dict["temperatureHighTime"] failed')
+        try:
+            daily_dict["temperatureLowTime"] = f"{dt.utcfromtimestamp(daily_dict['temperatureLowTime'] + time_adjust).strftime('%r')}"
+        except:
+            print('daily_dict["temperatureLowTime"] failed')
+        try:
+            daily_dict["time"] = f"{dt.utcfromtimestamp(daily_dict['time'] + time_adjust).strftime('%A %B %d')}"
+        except:
+            print('daily_dict["time"] failed')
+        try:
+            daily_dict["uvIndexTime"] = f"{dt.utcfromtimestamp(daily_dict['uvIndexTime'] + time_adjust).strftime('%r')}"
+        except:
+            print('daily_dict["uvIndexTime"] failed')
+        
+        # print(daily_dict["precipIntensityMaxTime"])
         
         daily_list.append(daily_dict)
+        
+
+
+    # print("exit daily loop")
     # print("daily weather complete")
     # print(daily_list)
+
     #Add all data sets to a list to pass to app
-    next_hour = response_json["minutely"]["summary"]
+    try:
+        next_hour = response_json["minutely"]["summary"]
+    except:
+        print("next hour failed")
+        next_hour = "Unavailable"
 
     data = [place, current_dict, hourly_list, daily_list, next_hour]
+
+    #Add Alerts
+    if "alerts" in response_json:
+        alerts = response_json["alerts"]
+        alert = []
+        for messages in alerts:
+            alert.append(messages["description"])
+        data.append(alert)
 
     # print(url)
     # print("DATA")

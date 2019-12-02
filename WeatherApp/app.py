@@ -25,6 +25,9 @@ def function():
     # print("__________________________")
     # print(data[2])
     # print(data[2])
+
+    # data = getData.getWeather(city)
+
     return render_template('results.html', data = data)
 
 
