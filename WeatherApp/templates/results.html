@@ -10,6 +10,9 @@
         <script>index.js</script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <style>
+            div.citation {
+                text-align: center;
+            }
             hr.endSection {
             border: 3px solid red;
             border-radius: 5px;
@@ -40,25 +43,34 @@
         </div>
         <div class="container">
             <div class="row">
+                <div class="col-md-12">
+                    <div class="citation"><h1>Powered by DarkSky API</h1></div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
-                    <div><h1>For {{ data[0] }}:</h1>
+                    <div><h1>For {{ data[0] }}:</h1></div>
                 </div>
             </div>
         </div>
 
+
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                        <h3><a class="scroll" id="scroll" href="#HourlyTop">Jump to Hourly</a></h3>
-
-                        <h3><a class="scroll" id="scroll" href="#DailyTop">Jump to Daily</a></h3>
-                    <div><h2>Right Now ({{ data[1]['time'] }}):</h2></div>
+                        <!-- <h3><a class="scroll" id="scroll" href="#Top">Jump to Top</a></h3> -->
+                        <br><h3><a class="scroll" id="scroll" href="#Top">Jump to Top</a></h3>
+                        <br><h3><a class="scroll" id="scroll" href="#HourlyTop">Jump to Hourly</a></h3>
+                </div>
+            
+                    <div><h2>Right Now ({{ data[1]['time'] }}): {{ data[1]['summary'] }}</h2></div>
                 <div class="col-md-6">
                     <!-- <div><h2>Current Weather ({{ data[1]['time'] }}):</h2></div> -->
-                        <div><h3>   Conditions: {{ data[1]['summary'] }}</h3></div>
+                        <!-- <div><h3>   Conditions: {{ data[1]['summary'] }}</h3></div> -->
                         <div><h3>  Temperature: {{ data[1]['temperature'] }}</h3></div>
                         <div><h3>   Feels Like {{ data[1]['apparentTemperature'] }}</h3></div>
                         <div><h3>   Cloud Coverage: {{ data[1]['cloudCover'] }}</h3></div>
+                        <div><h3>   Next Hour: {{ data[4] }}</h3></div>
                 </div>
                 <div class="col-md-6">
                     <div><h3>   Humidity: {{ data[1]['humidity'] }}</h3></div>
@@ -66,14 +78,18 @@
                     <div><h3>   {{ data[1]['precipIntensity'] }} inches per hour</h3></div>
                     <div><h3>   UV Index: {{ data[1]['uvIndex'] }}</h3></div>
                 </div>
-                </div>
-            </div> 
+            </div>
         </div>
+        
+        
         <hr class="endSection">
-        <h3><a class="scroll" id="scroll" href="#Top">Jump to Top</a>
-            <br><a class="scroll" id="scroll" href="#DailyTop">Jump to Daily</a></h3>
+
         <div class="container">
             <div class="row">
+                <div class="col-md-12">
+                    <h3><a class="scroll" id="scroll" href="#Top">Jump to Top</a>
+                        <br><a class="scroll" id="scroll" href="#DailyTop">Jump to Daily</a></h3>
+                </div>
                 <div class="col-md-6">
                     <div><h1><a id="HourlyTop">Hourly: {{ data[2]["summary"] }}</a></h1>
                 </div>
@@ -83,27 +99,43 @@
             <div class="row">
                 {% for hours in data[2] %} 
                 <div class="col-md-12">
-                    <h2>{{ hours['time'] }}:</h2>
+                    <h2>{{ hours['time'] }}: {{ hours['summary'] }}  {{ hours['temperature'] }}</h2>
                 </div>
-                <div class="col-md-4">
-                    <div><h3>   Conditions: {{ hours['summary'] }}</h3></div>
-                    <div><h3>  Temperature: {{ hours['temperature'] }}</h3></div>
+                <div class="col-md-6">
+                    <!-- <div><h3>   Conditions: {{ hours['summary'] }}</h3></div>
+                    <div><h3>  Temperature: {{ hours['temperature'] }}</h3></div> -->
                     <div><h3>   Feels Like {{ hours['apparentTemperature'] }}</h3></div>
+                    <div><h3>   Wind: {{ hours['windSpeed'] }} MPH</h3></div>
+                    <div><h3>   Cloud Coverage: {{ hours['cloudCover'] }}</h3></div>
+                    <div><h3>   UV Index: {{ hours['uvIndex'] }}</h3></div>
+                    <!-- <div><h3>   Humidity: {{ hours['humidity'] }}</h3></div>
+                    <div><h3>  Chance of precipitation: {{ hours['precipProbability'] }}</h3></div>
+                    <div><h3>   {{ hours['precipIntensity'] }} inches per hour</h3></div>
                     {% if "precipAccumulation" in hours %}
                     <div><h3>   Snow Accumulation: {{ hours['precipAccumulation'] }} inches</h3></div>
-                    {% endif %}
+                    {% endif %} -->
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
+                    <!-- <div><h3>   Wind: {{ hours['windSpeed'] }} MPH</h3></div>
+                    <div><h3>   Cloud Coverage: {{ hours['cloudCover'] }}</h3></div>
+                    <div><h3>   UV Index: {{ hours['uvIndex'] }}</h3></div> -->
                     <div><h3>   Humidity: {{ hours['humidity'] }}</h3></div>
                     <div><h3>  Chance of precipitation: {{ hours['precipProbability'] }}</h3></div>
                     <div><h3>   {{ hours['precipIntensity'] }} inches per hour</h3></div>
+                    {% if "precipAccumulation" in hours %}
+                    <div><h3>   Snow Accumulation: {{ hours['precipAccumulation'] }} inches</h3></div>
+                    {% endif %}
+                    <!-- <div><h3>   Humidity: {{ hours['humidity'] }}</h3></div>
+                    <div><h3>  Chance of precipitation: {{ hours['precipProbability'] }}</h3></div>
+                    <div><h3>   {{ hours['precipIntensity'] }} inches per hour</h3></div> -->
+                    
                 </div>
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
                     <div><h3>   Wind: {{ hours['windSpeed'] }} MPH</h3></div>
                     <div><h3>  Cloud Coverage: {{ hours['cloudCover'] }}</h3></div>
                     <div><h3>   UV Index: {{ hours['uvIndex'] }}</h3></div>
-                </div>
-                <hr>
+                </div> -->
+                <div class="col-md-12"><hr class="hourSeparator"></div>
                 <!-- <hr class="hourSeparator"> -->
                 {% endfor %}
             </div>
@@ -127,21 +159,23 @@
                     <div class="col-md-6">
                         <div><h3>   Low of {{ days['temperatureLow'] }} at {{ days['temperatureLowTime'] }}</h3></div>
                         <div><h3>   High of {{ days['temperatureHigh'] }} at {{ days['temperatureHighTime'] }}</h3></div>
-                        <div><h3>   {{ days['precipProbability'] }} chance of {{ days['precipType'] }}</h3></div>
-                        <div><h3>   Heaviest at {{ days['precipIntensityMaxTime'] }} ({{ days['precipIntensityMax'] }} inches per hour)</h3></div>
+                        <div><h3>   Humidity: {{ days['humidity'] }}</h3></div>
                         <div><h3>   Wind: {{ days['windSpeed'] }} MPH</h3></div>
+                        <div><h3>   UV Index High: {{ days['uvIndex'] }} at {{ days['uvIndexTime'] }}</h3></div>
                     </div>
                     <div class="col-md-6">
-                            <div><h3>   Sun up from {{ days['sunriseTime'] }} to {{ days['sunsetTime'] }}</h3></div>
-                            <div><h3>   UV Index High: {{ days['uvIndex'] }} at {{ days['uvIndexTime'] }}</h3></div>
-                            <div><h3>   Humidity: {{ days['humidity'] }}</h3></div>
+                            <div><h3>   Daylight from {{ days['sunriseTime'] }} to {{ days['sunsetTime'] }}</h3></div>
+                            
+                            
                             <div><h3>   Cloud Coverage: {{ days['cloudCover'] }}</h3></div>
                             <!-- <div><h3>   Feels Like {{ days['apparentTemperature'] }}</h3></div> -->
-                            {% if "icon" in days %}
+                            <div><h3>   {{ days['precipProbability'] }} chance of {{ days['precipType'] }}</h3></div>
+                            <div><h3>   Heaviest at {{ days['precipIntensityMaxTime'] }} ({{ days['precipIntensityMax'] }} inches per hour)</h3></div>
+                            {% if "precipAccumulation" in days %}
                             <div><h3>   Snow Accumulation: {{ days['precipAccumulation'] }} inches</h3></div>
                             {% endif %}
-                        </div>
-                    <hr>
+                    </div>
+                <div class="col-md-12"><hr class="hourSeparator"></div>
                     <!-- <hr class="hourSeparator"> -->
                     {% endfor %}
                 </div>

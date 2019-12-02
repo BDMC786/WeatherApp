@@ -153,16 +153,19 @@ def getWeather(city):
     # print("daily weather complete")
     # print(daily_list)
     #Add all data sets to a list to pass to app
-    data = [place, current_dict, hourly_list, daily_list]
+    next_hour = response_json["minutely"]["summary"]
 
+    data = [place, current_dict, hourly_list, daily_list, next_hour]
+
+    # print(url)
+    # print("DATA")
+    # print(data[0])
+    # print(data[1])
+    # print("HOURLY")
+    # print(data[2][0])
+    # print("DAILY")
+    # print(data[3][0])
     print(url)
-    print("DATA")
-    print(data[0])
-    print(data[1])
-    print("HOURLY")
-    print(data[2][0])
-    print("DAILY")
-    print(data[3][0])
 
     return data
 
