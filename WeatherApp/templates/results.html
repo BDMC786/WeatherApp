@@ -12,6 +12,7 @@
         <style>
             div.citation {
                 text-align: center;
+                color: red;
             }
             hr.endSection {
             border: 3px solid red;
@@ -25,6 +26,13 @@
     </head>
 
     <body style="background-color:lightblue;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="citation"><h1><strong>Powered by DarkSky API</strong></h1></div>
+                </div>
+            </div>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -42,11 +50,6 @@
             </div>
         </div>
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="citation"><h1>Powered by DarkSky API</h1></div>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-md-6">
                     <div><h1>For {{ data[0] }}:</h1></div>
