@@ -1,5 +1,7 @@
 from flask import Flask, request, render_template
 import getData
+import getBayonne
+import getMontclair
 #import scrape #Name of functions from getData.py file, code to be reconfig'ed to functions later
 
 app = Flask(__name__)
@@ -11,7 +13,6 @@ def my_form():
 
 @app.route('/', methods=['POST'])
 def function():
-    print("_________________________")
     city = request.form['text']
 
     try:
@@ -19,23 +20,48 @@ def function():
     except:
         return render_template("error.html")
 
-    # print(data[0])
-    # print("__________________________")
-    # print(data[1])
-    # print("__________________________")
-    # print(data[2])
-    # print(data[2])
+    return render_template('results.html', data = data)
 
-    # data = getData.getWeather(city)
+@app.route("/bayonne")
+def bayonne():
+    try:
+        data = getBayonne.getBayonne()
+    except:
+        return render_template("error.html")
+
+    return render_template('results.html', data = data)
+
+@app.route('/bayonne', methods=['POST'])
+def bayonneFunction():
+    city = request.form['text']
+
+    try:
+        data = getData.getWeather(city)
+    except:
+        return render_template("error.html")
 
     return render_template('results.html', data = data)
 
 
+@app.route("/montclair")
+def montclair():
+    try:
+        data = getMontclair.getMontclair()
+    except:
+        return render_template("error.html")
 
+    return render_template('shortcut.html', data = data)
 
+@app.route('/montclair', methods=['POST'])
+def montclairFunction():
+    city = request.form['text']
 
+    try:
+        data = getData.getWeather(city)
+    except:
+        return render_template("error.html")
 
-
+    return render_template('shortcut.html', data = data)
 
 
 if __name__=='__main__':

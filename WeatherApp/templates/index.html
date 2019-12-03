@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +7,10 @@
         <title>Weather</title>
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script>index.js</script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        
         <style>
             div.citation {
                 text-align: center;
@@ -35,19 +37,36 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <form method="POST">
                         <div class="form-group">
-                            <h2>Weather Forecast</h2>
-                            <div class="row">
-                                <input class="form-control" id="home_input" name="text" placeholder="Enter City and State">
-                            </div>
+                            <h1>Weather Forecast</h1>
+                            <input class="form-control" id="input" name="text" placeholder="Enter City and State">
                         </div>
                         <input type="submit" type="text">
-                        <!-- <button id="submit" type="submit" class="btn btn-default">Submit</button> -->
                     </form>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                        <h2>Some popular locations:</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>
+                        <a href="/bayonne">Bayonne, NJ</a>
+                    </h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>
+                        <a href="/montclair">Montclair, NJ</a>
+                    </h2>
+                </div>
+            </div>
+
         </div>
 
 
