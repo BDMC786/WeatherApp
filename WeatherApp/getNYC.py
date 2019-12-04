@@ -1,53 +1,24 @@
-def getWeather(city):
+def getNYC():
+    print("Begin NYC")
     import json
     import requests
     from datetime import datetime as dt
     # import pytz
     import datetime, pytz
-    key = "5fc1f583fa2e15d8a27208e502ba5fb0"
-    # print(key)
-    #Get user input from App as variable selection
 
-    #Convert selection to coordinates 
-    # selection = "Bayonne, NJ" #For Testing purposes ONLY
-    
-    from geopy.geocoders import Nominatim
-    geolocator = Nominatim(timeout=300, user_agent="WeatherApp")
-    location = geolocator.geocode(city)
-    latitude = location.latitude
-    longitude = location.longitude
-    print(location)
-
-    #Get location name from geopy
-    city_mod = f"{location}".split(", ") #Need to use the f method here?
-    place = f'{city_mod[0]}, {city_mod[2]}'
-    
-    #Get utc offset in seconds
-    # zone_url = "http://api.geonames.org/timezoneJSON?formatted=true&lat={}&lng={}&username=WeatherApp".format(latitude,longitude)
-    # r = requests.get(zone_url) ## Make a request
-
-
-
-    # x = datetime.datetime.now(pytz.timezone(r.json()['timezoneId'])).strftime('%z')
-    # time_adjust = (int(x)/100) * 3600
-    # print("time adjust:")
-    # print(time_adjust)
-
-    #Get URL for API call to DarkSky
-    url = f'https://api.darksky.net/forecast/{key}/{latitude},{longitude}'
+    url = "https://api.darksky.net/forecast/5fc1f583fa2e15d8a27208e502ba5fb0/40.7896239,-73.9598939"
+    place = "New York, NY"
 
     #Make API Call
     response = requests.get(url)
     response_json = response.json()
 
-    #Get timezone offset
-    x = response_json["offset"]
-    time_adjust = (int(x)) * 3600
-    # print("time adjust:")
-    # print(time_adjust)
 
-   #Get Current Conditions from API data
+    time_adjust = -18000
+
+    #Get Current Conditions from API data
     current_weather = response_json["currently"]
+    print(current_weather)
 
     #Pull data from current conditions
     current_dict = {}
@@ -74,8 +45,6 @@ def getWeather(city):
     if "precipAccumulation" in current_dict:
         current_dict["precipAccumulation"] = f'Snowfall Accumulation: {current_dict["precipAccumulation"]} Inches'
     
-    # print("Current Weather Complete")
-    # print(current_dict)
 
     #Hourly Conditions
     hourly_weather = response_json["hourly"]["data"]
@@ -123,35 +92,9 @@ def getWeather(city):
         
         hourly_list.append(hour_dict)
 
-    
-    # print("hours done")
-    
-    # #Correct Format
-    # for hours in hourly_list:
-    #     hours["apparentTemperature"] = round(hours["apparentTemperature"]) #Round 
-    #     hours["cloudCover"] = f'{round(hours["cloudCover"] * 100)}%' #Percentage
-    #     hours["humidity"] = f'{round(hours["humidity"] * 100)}%'
-    #     # Not sure how to format precipIntensity
-    #     hours["precipProbability"] = f'{round(hours["precipProbability"] * 100)}%'
-    #     hours["temperature"] = round(hours["temperature"])
 
-    # #Adjust to local time
-    # for hours in hourly_list:
-    #     hours["time"] = int(hours["time"]) + int(time_adjust)
-
-    #Convert Time to AM/PM fprmat
-    # for hours in hourly_list:
-    #     #print(hours["time"])
-    #     hours["time"] =  dt.utcfromtimestamp(int(hours["time"]) + int(time_adjust)).strftime('%r')
-    
-        
-
-    # print("hourly weather complete")
-    # print(hourly_list)
-    
     #Daily
     daily_weather = response_json["daily"]["data"]
-    # print(daily_weather)
 
     #Pull data from Daily Conditions
     daily_elements_try = ["cloudCover", "humidity", "icon", "precipIntensity", "precipIntensityMax", 
@@ -160,11 +103,7 @@ def getWeather(city):
     daily_elements = []
     daily_list = []
 
-    # print("enter daily loop")
-
     for days in daily_weather:
-    #     print(days)
-    #     print("_____________")
         daily_dict = {}
         for elements in daily_elements_try:
             # print("elements")
@@ -200,7 +139,7 @@ def getWeather(city):
         except:
             print('daily_dict["windSpeed"] failed')
 
-            #TIMES
+        #TIMES
         try:
             daily_dict["precipIntensityMaxTime"] = f"{dt.utcfromtimestamp(daily_dict['precipIntensityMaxTime'] + time_adjust).strftime('%r')}"
         except:
@@ -236,10 +175,6 @@ def getWeather(city):
         
 
 
-    # print("exit daily loop")
-    # print("daily weather complete")
-    # print(daily_list)
-
     #Add all data sets to a list to pass to app
     try:
         next_hour = response_json["minutely"]["summary"]
@@ -249,7 +184,7 @@ def getWeather(city):
 
     data = [place, current_dict, hourly_list, daily_list, next_hour]
 
-    #Add Alerts
+        #Add Alerts
     if "alerts" in response_json:
         all_alerts = response_json["alerts"]
         alerts = []
@@ -260,32 +195,6 @@ def getWeather(city):
         alerts.append("CLEAR") 
         data.append(alerts)
 
-
-
-    print(url)
-    # print("DATA")
-    # print(data[0])
-    # print(data[1])
-    # print("HOURLY")
-    # print(data[2][0])
-    # print("DAILY")
-    # print(data[3][0])
-    # print(url)
-    try:
-        print(data[5][0])
-    except:
-        print("NO ALERTS")
-    # print("________________")
-    # if alerts in data:
-    #     print(alerts)
-        # for alert in alerts:
-        #     print(alert)
-    
-    # if len(data) == 6:
-    #     print(data[5])
-
     print("END")
 
     return data
-
-# getWeather()
