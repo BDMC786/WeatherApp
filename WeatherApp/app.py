@@ -1,15 +1,12 @@
 from flask import Flask, request, render_template
 import getData
-import getBayonne
-import getMontclair
-import getNYC
-#import scrape #Name of functions from getData.py file, code to be reconfig'ed to functions later
+
 
 app = Flask(__name__)
 
 @app.route('/')
 def my_form():
-    return render_template('index.html') #MUST credit DarkSky and link to page
+    return render_template('index.html') 
 
 
 @app.route('/', methods=['POST'])
@@ -36,6 +33,7 @@ def function():
 
 @app.route("/bayonne")
 def bayonne():
+    import getBayonne
     try:
         data = getBayonne.getBayonne()
     except:
@@ -68,12 +66,13 @@ def bayonneFunction():
 
 @app.route("/montclair")
 def montclair():
+    import getMontclair
     try:
         data = getMontclair.getMontclair()
     except:
         return render_template("error.html")
 
-    return render_template('shortcut.html', data = data)
+    return render_template('results.html', data = data)
 
 @app.route('/montclair', methods=['POST'])
 def montclairFunction():
@@ -95,11 +94,12 @@ def montclairFunction():
     except:
         return render_template("error.html")
 
-    return render_template('shortcut.html', data = data)
+    return render_template('results.html', data = data)
 
 
 @app.route("/new_york")
 def NYC():
+    import getNYC
     try:
         data = getNYC.getNYC()
     except:
@@ -192,6 +192,74 @@ def HightstownFunction():
         return render_template("error.html")
 
     return render_template('results.html', data = data)
+
+@app.route("/atlanta")
+def atlanta():
+    import getAtlanta
+    try:
+        data = getAtlanta.getAtlanta()
+    except:
+        return render_template("error.html")
+
+    return render_template('results.html', data = data)
+
+@app.route('/atlanta', methods=['POST'])
+def atlantaFunction():
+    city = request.form['text']
+
+    if city.lower() == "new york":
+        city = "manhattan"
+    elif city.lower() == "new york, ny":
+        city = "manhattan"
+    elif city.lower() == "new york, new york":
+        city = "manhattan"
+    elif city.lower() == "new york ny":
+        city = "manhattan"
+    elif city.lower() == "new york new york":
+        city = "manhattan"
+
+
+    try:
+        data = getData.getWeather(city)
+    except:
+        return render_template("error.html")
+
+    return render_template('results.html', data = data)
+
+@app.route("/easton")
+def easton():
+    import getEaston
+    try:
+        data = getEaston.getEaston()
+    except:
+        return render_template("error.html")
+
+    return render_template('results.html', data = data)
+
+@app.route('/easton', methods=['POST'])
+def eastonFunction():
+    city = request.form['text']
+
+    if city.lower() == "new york":
+        city = "manhattan"
+    elif city.lower() == "new york, ny":
+        city = "manhattan"
+    elif city.lower() == "new york, new york":
+        city = "manhattan"
+    elif city.lower() == "new york ny":
+        city = "manhattan"
+    elif city.lower() == "new york new york":
+        city = "manhattan"
+    elif city.lower() == "sexlanta":
+        city = "atlanta, ga"
+
+    try:
+        data = getData.getWeather(city)
+    except:
+        return render_template("error.html")
+
+    return render_template('results.html', data = data)
+
 
 
 if __name__=='__main__':

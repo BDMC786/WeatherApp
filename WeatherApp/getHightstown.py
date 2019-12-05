@@ -1,9 +1,7 @@
 def getHightstown():
-    print("Begin Hightstown")
     import json
     import requests
     from datetime import datetime as dt
-    # import pytz
     import datetime, pytz
 
     url = "https://api.darksky.net/forecast/5fc1f583fa2e15d8a27208e502ba5fb0/40.2695538,-74.5232089"
@@ -18,17 +16,15 @@ def getHightstown():
 
     #Get Current Conditions from API data
     current_weather = response_json["currently"]
-    print(current_weather)
 
     #Pull data from current conditions
     current_dict = {}
     current_list_try = ["apparentTemperature",  "cloudCover", "humidity", "precipIntensity", "precipAccumulation", "precipProbability", "summary", "temperature", "time", "uvIndex"]
-    #    current_list_try = ["time", "summary", "temperature", "apparentTemperature", "uvIndex", "cloudCover", "humidity", "precipProbability", "precipIntensity", "precipAccumulation"]
-    current_list = []
+
     for elements in current_list_try:
         if elements in current_weather:
-            current_list.append(elements)
             current_dict[elements] = current_weather[elements]
+            
     #Adjusts Time to local time
     current_dict["time"] = current_dict["time"] + time_adjust
 
@@ -39,7 +35,6 @@ def getHightstown():
     current_dict["apparentTemperature"] = f'{round(current_dict["apparentTemperature"])} °F' #Round 
     current_dict["cloudCover"] = f'{round(current_dict["cloudCover"] * 100)}%' #Percentage
     current_dict["humidity"] = f'{round(current_dict["humidity"] * 100)}%'
-    # Not sure how to format precipIntensity
     current_dict["precipProbability"] = f'{round(current_dict["precipProbability"] * 100)}%'
     current_dict["temperature"] = f'{round(current_dict["temperature"])} °F'
     if "precipAccumulation" in current_dict:

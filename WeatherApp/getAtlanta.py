@@ -1,11 +1,12 @@
-def getCulver():
+def getAtlanta():
     import json
     import requests
     from datetime import datetime as dt
+
     import datetime, pytz
 
-    url = "https://api.darksky.net/forecast/5fc1f583fa2e15d8a27208e502ba5fb0/41.2189311,-86.4230626"
-    place = "Culver, IN"
+    url = "https://api.darksky.net/forecast/5fc1f583fa2e15d8a27208e502ba5fb0/33.7490987,-84.3901849"
+    place = "Atlanta, GA"
 
     #Make API Call
     response = requests.get(url)
@@ -20,11 +21,11 @@ def getCulver():
     #Pull data from current conditions
     current_dict = {}
     current_list_try = ["apparentTemperature",  "cloudCover", "humidity", "precipIntensity", "precipAccumulation", "precipProbability", "summary", "temperature", "time", "uvIndex"]
-    
+
     for elements in current_list_try:
         if elements in current_weather:
             current_dict[elements] = current_weather[elements]
-
+            
     #Adjusts Time to local time
     current_dict["time"] = current_dict["time"] + time_adjust
 
@@ -163,8 +164,7 @@ def getCulver():
             daily_dict["uvIndexTime"] = f"{dt.utcfromtimestamp(daily_dict['uvIndexTime'] + time_adjust).strftime('%r')}"
         except:
             print('daily_dict["uvIndexTime"] failed')
-        
-        # print(daily_dict["precipIntensityMaxTime"])
+
         
         daily_list.append(daily_dict)
         
