@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 import getData
-
+# from .getData import getWeather
 
 app = Flask(__name__)
 

@@ -188,7 +188,7 @@ def getCulver():
     else:
         alerts = []
         alerts.append("CLEAR") 
-        data.append(alerts)
+    data.append(alerts)
 
     print("END")
 

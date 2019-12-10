@@ -20,7 +20,7 @@ def getBayonne():
     #Pull data from current conditions
     current_dict = {}
     current_list_try = ["apparentTemperature",  "cloudCover", "humidity", "precipIntensity", "precipAccumulation", "precipProbability", "summary", "temperature", "time", "uvIndex"]
-
+    
     for elements in current_list_try:
         if elements in current_weather:
             current_dict[elements] = current_weather[elements]
@@ -188,9 +188,9 @@ def getBayonne():
     else:
         alerts = []
         alerts.append("CLEAR") 
-        data.append(alerts)
+    data.append(alerts)
 
+    print(data[5])
     print("END")
 
     return data
-

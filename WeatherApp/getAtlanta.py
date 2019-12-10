@@ -179,7 +179,7 @@ def getAtlanta():
 
     data = [place, current_dict, hourly_list, daily_list, next_hour]
 
-        #Add Alerts
+    #Add Alerts
     if "alerts" in response_json:
         all_alerts = response_json["alerts"]
         alerts = []
@@ -188,7 +188,7 @@ def getAtlanta():
     else:
         alerts = []
         alerts.append("CLEAR") 
-        data.append(alerts)
+    data.append(alerts)
 
     print("END")
 
