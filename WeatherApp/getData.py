@@ -4,7 +4,7 @@ def getWeather(city):
     from datetime import datetime as dt
     # import pytz
     import datetime, pytz
-    key = "5fc1f583fa2e15d8a27208e502ba5fb0"
+    key = ""
 
     #Convert selection to coordinates 
     
